@@ -1,0 +1,29 @@
+
+SCANASSIST ENGINEER REPORT
+
+Generated:
+2026-09-14 15:29:58
+
+Machine Type:
+mri
+
+Machine Model:
+mri-x100
+
+Error:
+Cooling System Warning
+
+Risk Level:
+Medium
+
+Completed Steps:
+
+[DONE] Check room temperature
+[DONE] Check air vents
+[DONE] Restart cooling unit
+
+Status:
+UNRESOLVED
+
+Recommendation:
+Engineer Inspection Required

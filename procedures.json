@@ -1,0 +1,82 @@
+{
+  "Cooling System Warning": {
+    "risk": "Medium",
+    "steps": [
+      "Check room temperature",
+      "Check air vents",
+      "Restart cooling unit"
+    ]
+  },
+  "Low Helium Warning": {
+    "risk": "High",
+    "steps": [
+      "Verify warning message",
+      "Stop non-essential operation",
+      "Contact engineer"
+    ]
+  },
+  "Network Error": {
+    "risk": "Low",
+    "steps": [
+      "Check network cable",
+      "Restart workstation",
+      "Verify router status"
+    ]
+  },
+  "Power Failure": {
+    "risk": "High",
+    "steps": [
+      "Check power supply",
+      "Verify UPS status",
+      "Contact engineer"
+    ]
+  },
+  "Scanner Communication Error": {
+    "risk": "Medium",
+    "steps": [
+      "Check communication cables",
+      "Restart scanner console",
+      "Verify network connection"
+    ]
+  },
+  "Patient Table Error": {
+    "risk": "Medium",
+    "steps": [
+      "Inspect table movement",
+      "Check safety lock",
+      "Restart table controller"
+    ]
+  },
+  "Image Reconstruction Error": {
+    "risk": "Medium",
+    "steps": [
+      "Verify scan parameters",
+      "Check storage availability",
+      "Restart reconstruction service"
+    ]
+  },
+  "Coil Connection Error": {
+    "risk": "Low",
+    "steps": [
+      "Reconnect coil",
+      "Check connector pins",
+      "Run coil test"
+    ]
+  },
+  "Gradient System Error": {
+    "risk": "High",
+    "steps": [
+      "Stop scanning",
+      "Record error code",
+      "Contact engineer"
+    ]
+  },
+  "Temperature Sensor Error": {
+    "risk": "Medium",
+    "steps": [
+      "Verify sensor reading",
+      "Inspect cooling system",
+      "Restart scanner"
+    ]
+  }
+}
