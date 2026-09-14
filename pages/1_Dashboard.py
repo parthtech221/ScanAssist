@@ -1,12 +1,15 @@
 import streamlit as st
 import json
 import os
+import pandas as pd
 
 st.title("📊 Dashboard")
 
+# Load Procedures
 with open("procedures.json", "r", encoding="utf-8") as f:
     procedures = json.load(f)
 
+# Reports Folder
 os.makedirs("reports", exist_ok=True)
 
 report_files = [
@@ -14,6 +17,7 @@ report_files = [
     if f.endswith(".txt")
 ]
 
+# Risk Counts
 high_risk = sum(
     1
     for p in procedures.values()
@@ -32,6 +36,7 @@ low_risk = sum(
     if p["risk"] == "Low"
 )
 
+# Top Metrics
 c1, c2, c3, c4 = st.columns(4)
 
 with c1:
@@ -48,8 +53,57 @@ with c4:
 
 st.divider()
 
-st.subheader("Knowledge Base Summary")
+# Risk Distribution Chart
+st.subheader("📈 Risk Distribution")
 
-st.write(f"High Risk Procedures: {high_risk}")
-st.write(f"Medium Risk Procedures: {medium_risk}")
-st.write(f"Low Risk Procedures: {low_risk}")
+risk_df = pd.DataFrame(
+    {
+        "Risk": ["High", "Medium", "Low"],
+        "Count": [
+            high_risk,
+            medium_risk,
+            low_risk
+        ]
+    }
+)
+
+st.bar_chart(
+    risk_df.set_index("Risk")
+)
+
+st.divider()
+
+# Knowledge Base Table
+st.subheader("📋 Knowledge Base Overview")
+
+data = []
+
+for name, info in procedures.items():
+
+    data.append(
+        {
+            "Procedure": name,
+            "Risk": info["risk"],
+            "Steps": len(info["steps"])
+        }
+    )
+
+df = pd.DataFrame(data)
+
+st.dataframe(
+    df,
+    use_container_width=True
+)
+
+st.divider()
+
+# Recent Reports
+st.subheader("📄 Recent Reports")
+
+if report_files:
+
+    for report in sorted(report_files, reverse=True)[:5]:
+        st.write(f"📄 {report}")
+
+else:
+    st.info("No reports generated yet.")
