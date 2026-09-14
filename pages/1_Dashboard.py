@@ -3,92 +3,200 @@ import json
 import os
 import pandas as pd
 
-st.title("📊 Dashboard")
+st.title("🩺 ScanAssist Dashboard")
+st.caption("Safety-First CT/MRI Troubleshooting Assistant")
 
-# Load Procedures
-with open("procedures.json", "r", encoding="utf-8") as f:
+# =====================================
+# LOAD KNOWLEDGE BASE
+# =====================================
+
+with open(
+    "procedures.json",
+    "r",
+    encoding="utf-8"
+) as f:
+
     procedures = json.load(f)
 
-# Reports Folder
-os.makedirs("reports", exist_ok=True)
+# =====================================
+# REPORTS
+# =====================================
 
-report_files = [
-    f for f in os.listdir("reports")
-    if f.endswith(".txt")
-]
-
-# Risk Counts
-high_risk = sum(
-    1
-    for p in procedures.values()
-    if p["risk"] == "High"
+os.makedirs(
+    "reports",
+    exist_ok=True
 )
 
-medium_risk = sum(
-    1
-    for p in procedures.values()
-    if p["risk"] == "Medium"
+report_count = len(
+    [
+        f for f in os.listdir("reports")
+        if f.endswith(".txt")
+    ]
 )
 
-low_risk = sum(
-    1
-    for p in procedures.values()
-    if p["risk"] == "Low"
-)
+# =====================================
+# BUILD DATAFRAME
+# =====================================
 
-# Top Metrics
-c1, c2, c3, c4 = st.columns(4)
+rows = []
 
-with c1:
-    st.metric("Procedures", len(procedures))
+for procedure, info in procedures.items():
 
-with c2:
-    st.metric("Reports", len(report_files))
-
-with c3:
-    st.metric("High Risk", high_risk)
-
-with c4:
-    st.metric("Medium Risk", medium_risk)
-
-st.divider()
-
-# Risk Distribution Chart
-st.subheader("📈 Risk Distribution")
-
-risk_df = pd.DataFrame(
-    {
-        "Risk": ["High", "Medium", "Low"],
-        "Count": [
-            high_risk,
-            medium_risk,
-            low_risk
-        ]
-    }
-)
-
-st.bar_chart(
-    risk_df.set_index("Risk")
-)
-
-st.divider()
-
-# Knowledge Base Table
-st.subheader("📋 Knowledge Base Overview")
-
-data = []
-
-for name, info in procedures.items():
-
-    data.append(
+    rows.append(
         {
-            "Procedure": name,
+            "Procedure": procedure,
             "Risk": info["risk"],
-            "Steps": len(info["steps"])
+            "Category": info["category"],
+            "Severity": info["severity"],
+            "Estimated Time": info["estimated_time"]
         }
     )
 
-df = pd.DataFrame(data)
+df = pd.DataFrame(rows)
+
+# =====================================
+# SYSTEM STATUS
+# =====================================
+
+st.subheader("🟢 System Status")
+
+st.success(
+    "ScanAssist System Operational"
+)
+
+# =====================================
+# TOP METRICS
+# =====================================
+
+c1, c2, c3, c4 = st.columns(4)
+
+with c1:
+
+    st.metric(
+        "Procedures",
+        len(df)
+    )
+
+with c2:
+
+    st.metric(
+        "Reports",
+        report_count
+    )
+
+with c3:
+
+    high_risk = len(
+        df[df["Risk"] == "High"]
+    )
+
+    st.metric(
+        "High Risk Issues",
+        high_risk
+    )
+
+with c4:
+
+    avg_severity = int(
+        df["Severity"].mean()
+    )
+
+    st.metric(
+        "Avg Severity",
+        avg_severity
+    )
+
+st.divider()
+
+# =====================================
+# QUICK ACTIONS
+# =====================================
+
+st.subheader("⚡ Quick Actions")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.info(
+        "🔧 Go to Troubleshooting page to resolve scanner issues."
+    )
+
+with col2:
+
+    st.info(
+        "📄 View generated engineer reports."
+    )
+
+with col3:
+
+    st.info(
+        "📈 Open Analytics for system insights."
+    )
+
+st.divider()
+
+# =====================================
+# RISK OVERVIEW
+# =====================================
+
+st.subheader("🚨 Risk Overview")
+
+risk_counts = (
+    df["Risk"]
+    .value_counts()
+)
+
+st.bar_chart(
+    risk_counts
+)
+
+st.divider()
+
+# =====================================
+# CATEGORY OVERVIEW
+# =====================================
+
+st.subheader("🗂 Procedure Categories")
+
+category_counts = (
+    df["Category"]
+    .value_counts()
+)
+
+st.bar_chart(
+    category_counts
+)
+
+st.divider()
+
+# =====================================
+# TOP CRITICAL ISSUES
+# =====================================
+
+st.subheader("🔥 Top Critical Procedures")
+
+critical_df = (
+    df.sort_values(
+        by="Severity",
+        ascending=False
+    )
+    .head(5)
+)
+
+for _, row in critical_df.iterrows():
+
+    st.error(
+        f"{row['Procedure']}  |  Severity {row['Severity']}/100"
+    )
+
+st.divider()
+
+# =====================================
+# RECENT KNOWLEDGE BASE
+# =====================================
+
+st.subheader("📋 Knowledge Base Overview")
 
 st.dataframe(
     df,
@@ -97,13 +205,50 @@ st.dataframe(
 
 st.divider()
 
-# Recent Reports
-st.subheader("📄 Recent Reports")
+# =====================================
+# AI SYSTEM INSIGHTS
+# =====================================
 
-if report_files:
+st.subheader("🤖 AI Insights")
 
-    for report in sorted(report_files, reverse=True)[:5]:
-        st.write(f"📄 {report}")
+highest = (
+    df.sort_values(
+        by="Severity",
+        ascending=False
+    )
+    .iloc[0]
+)
 
-else:
-    st.info("No reports generated yet.")
+lowest = (
+    df.sort_values(
+        by="Severity",
+        ascending=True
+    )
+    .iloc[0]
+)
+
+st.warning(
+    f"Highest priority procedure: {highest['Procedure']} ({highest['Severity']}/100)"
+)
+
+st.success(
+    f"Lowest priority procedure: {lowest['Procedure']} ({lowest['Severity']}/100)"
+)
+
+st.info(
+    f"Knowledge base contains {len(df)} troubleshooting procedures."
+)
+
+st.info(
+    f"Generated reports available: {report_count}"
+)
+
+st.divider()
+
+# =====================================
+# FOOTER
+# =====================================
+
+st.caption(
+    "ScanAssist v1.0 | CT/MRI Troubleshooting Assistant"
+)

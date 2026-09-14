@@ -11,6 +11,42 @@
     ]
   },
 
+  "Cooling Pump Failure": {
+    "risk": "High",
+    "category": "Cooling",
+    "severity": 92,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Inspect cooling pump",
+      "Verify coolant flow",
+      "Contact engineer"
+    ]
+  },
+
+  "Chiller Communication Error": {
+    "risk": "Medium",
+    "category": "Cooling",
+    "severity": 70,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Check communication cable",
+      "Restart chiller",
+      "Verify controller status"
+    ]
+  },
+
+  "Temperature Sensor Error": {
+    "risk": "Medium",
+    "category": "Sensors",
+    "severity": 60,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Verify sensor reading",
+      "Inspect cooling system",
+      "Restart scanner"
+    ]
+  },
+
   "Low Helium Warning": {
     "risk": "High",
     "category": "Helium",
@@ -23,15 +59,27 @@
     ]
   },
 
-  "Network Error": {
-    "risk": "Low",
-    "category": "Network",
-    "severity": 30,
-    "estimated_time": "15 mins",
+  "Helium Refill Required": {
+    "risk": "High",
+    "category": "Helium",
+    "severity": 90,
+    "estimated_time": "10 mins",
     "steps": [
-      "Check network cable",
-      "Restart workstation",
-      "Verify router status"
+      "Verify helium level",
+      "Record system status",
+      "Schedule refill service"
+    ]
+  },
+
+  "Magnet Temperature Alert": {
+    "risk": "High",
+    "category": "Helium",
+    "severity": 97,
+    "estimated_time": "5 mins",
+    "steps": [
+      "Stop scanning",
+      "Record alert code",
+      "Contact engineer"
     ]
   },
 
@@ -47,6 +95,66 @@
     ]
   },
 
+  "UPS Battery Failure": {
+    "risk": "High",
+    "category": "Power",
+    "severity": 90,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Check UPS battery status",
+      "Verify power connections",
+      "Contact engineer"
+    ]
+  },
+
+  "Voltage Fluctuation Warning": {
+    "risk": "Medium",
+    "category": "Power",
+    "severity": 65,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Check power stability",
+      "Inspect UPS logs",
+      "Monitor system"
+    ]
+  },
+
+  "Network Error": {
+    "risk": "Low",
+    "category": "Network",
+    "severity": 30,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Check network cable",
+      "Restart workstation",
+      "Verify router status"
+    ]
+  },
+
+  "DICOM Transfer Error": {
+    "risk": "Medium",
+    "category": "Network",
+    "severity": 65,
+    "estimated_time": "20 mins",
+    "steps": [
+      "Verify PACS connectivity",
+      "Check network settings",
+      "Retry transfer"
+    ]
+  },
+
+  "PACS Connection Failure": {
+    "risk": "Medium",
+    "category": "Network",
+    "severity": 70,
+    "estimated_time": "20 mins",
+    "steps": [
+      "Verify PACS server",
+      "Check IP configuration",
+      "Reconnect service"
+    ]
+  },
+
   "Scanner Communication Error": {
     "risk": "Medium",
     "category": "Communication",
@@ -56,6 +164,30 @@
       "Check communication cables",
       "Restart scanner console",
       "Verify network connection"
+    ]
+  },
+
+  "Console Communication Failure": {
+    "risk": "Medium",
+    "category": "Communication",
+    "severity": 68,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Check console connection",
+      "Restart workstation",
+      "Verify scanner link"
+    ]
+  },
+
+  "Remote Service Connection Error": {
+    "risk": "Low",
+    "category": "Communication",
+    "severity": 40,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Check internet access",
+      "Verify remote service",
+      "Reconnect session"
     ]
   },
 
@@ -71,6 +203,30 @@
     ]
   },
 
+  "Table Position Sensor Error": {
+    "risk": "Medium",
+    "category": "Mechanical",
+    "severity": 58,
+    "estimated_time": "20 mins",
+    "steps": [
+      "Verify sensor reading",
+      "Inspect sensor wiring",
+      "Restart table system"
+    ]
+  },
+
+  "Table Movement Obstruction": {
+    "risk": "Medium",
+    "category": "Mechanical",
+    "severity": 62,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Inspect table path",
+      "Remove obstruction",
+      "Test movement"
+    ]
+  },
+
   "Image Reconstruction Error": {
     "risk": "Medium",
     "category": "Software",
@@ -80,6 +236,30 @@
       "Verify scan parameters",
       "Check storage availability",
       "Restart reconstruction service"
+    ]
+  },
+
+  "Software Service Crash": {
+    "risk": "Medium",
+    "category": "Software",
+    "severity": 60,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Restart service",
+      "Review logs",
+      "Verify operation"
+    ]
+  },
+
+  "Database Synchronization Error": {
+    "risk": "Medium",
+    "category": "Software",
+    "severity": 65,
+    "estimated_time": "20 mins",
+    "steps": [
+      "Check database service",
+      "Verify connectivity",
+      "Restart synchronization"
     ]
   },
 
@@ -95,6 +275,30 @@
     ]
   },
 
+  "Coil Identification Failure": {
+    "risk": "Low",
+    "category": "Hardware",
+    "severity": 40,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Reconnect coil",
+      "Verify compatibility",
+      "Restart scanner"
+    ]
+  },
+
+  "Coil Signal Loss": {
+    "risk": "Medium",
+    "category": "Hardware",
+    "severity": 55,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Inspect coil cable",
+      "Reconnect hardware",
+      "Run diagnostic test"
+    ]
+  },
+
   "Gradient System Error": {
     "risk": "High",
     "category": "Scanner Core",
@@ -107,15 +311,171 @@
     ]
   },
 
-  "Temperature Sensor Error": {
+  "Gradient Amplifier Failure": {
+    "risk": "High",
+    "category": "Scanner Core",
+    "severity": 96,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Stop operation",
+      "Record amplifier fault",
+      "Contact engineer"
+    ]
+  },
+
+  "RF Amplifier Error": {
+    "risk": "High",
+    "category": "Scanner Core",
+    "severity": 94,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Stop scanning",
+      "Check RF subsystem",
+      "Contact engineer"
+    ]
+  },
+
+  "Storage Capacity Warning": {
+    "risk": "Low",
+    "category": "Storage",
+    "severity": 35,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Check available disk space",
+      "Archive old studies",
+      "Restart storage service"
+    ]
+  },
+
+  "Storage Service Failure": {
     "risk": "Medium",
-    "category": "Sensors",
+    "category": "Storage",
+    "severity": 70,
+    "estimated_time": "20 mins",
+    "steps": [
+      "Check storage service",
+      "Review logs",
+      "Restart service"
+    ]
+  },
+
+  "Disk Read Error": {
+    "risk": "Medium",
+    "category": "Storage",
+    "severity": 75,
+    "estimated_time": "20 mins",
+    "steps": [
+      "Check disk health",
+      "Review error logs",
+      "Contact engineer if persistent"
+    ]
+  },
+
+  "Patient Monitoring Disconnect": {
+    "risk": "Medium",
+    "category": "Monitoring",
+    "severity": 65,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Check monitor connection",
+      "Reconnect device",
+      "Verify readings"
+    ]
+  },
+
+  "ECG Signal Error": {
+    "risk": "Medium",
+    "category": "Monitoring",
     "severity": 60,
     "estimated_time": "15 mins",
     "steps": [
-      "Verify sensor reading",
-      "Inspect cooling system",
-      "Restart scanner"
+      "Verify ECG leads",
+      "Reconnect electrodes",
+      "Test monitoring system"
+    ]
+  },
+
+  "Emergency Stop Activated": {
+    "risk": "High",
+    "category": "Safety",
+    "severity": 93,
+    "estimated_time": "5 mins",
+    "steps": [
+      "Verify emergency condition",
+      "Inspect emergency stop switch",
+      "Contact engineer"
+    ]
+  },
+
+  "Door Interlock Error": {
+    "risk": "High",
+    "category": "Safety",
+    "severity": 88,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Check door status",
+      "Verify interlock sensor",
+      "Test safety system"
+    ]
+  },
+
+  "Patient Positioning Error": {
+    "risk": "Low",
+    "category": "Workflow",
+    "severity": 30,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Verify patient position",
+      "Adjust table",
+      "Repeat positioning check"
+    ]
+  },
+
+  "Protocol Loading Error": {
+    "risk": "Low",
+    "category": "Workflow",
+    "severity": 40,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Reload protocol",
+      "Verify protocol library",
+      "Restart application"
+    ]
+  },
+
+  "Contrast Injector Communication Error": {
+    "risk": "Medium",
+    "category": "Peripheral Devices",
+    "severity": 68,
+    "estimated_time": "15 mins",
+    "steps": [
+      "Verify injector connection",
+      "Restart injector",
+      "Check communication settings"
+    ]
+  },
+
+  "Printer Connection Error": {
+    "risk": "Low",
+    "category": "Peripheral Devices",
+    "severity": 25,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Check printer connection",
+      "Restart printer",
+      "Print test page"
+    ]
+  },
+
+  "Workstation Login Failure": {
+    "risk": "Low",
+    "category": "Access Control",
+    "severity": 20,
+    "estimated_time": "10 mins",
+    "steps": [
+      "Verify credentials",
+      "Check user permissions",
+      "Restart workstation"
     ]
   }
 }
