@@ -1,78 +1,117 @@
 {
   "Cooling System Warning": {
     "risk": "Medium",
+    "category": "Cooling",
+    "severity": 60,
+    "estimated_time": "10 mins",
     "steps": [
       "Check room temperature",
       "Check air vents",
       "Restart cooling unit"
     ]
   },
+
   "Low Helium Warning": {
     "risk": "High",
+    "category": "Helium",
+    "severity": 95,
+    "estimated_time": "5 mins",
     "steps": [
       "Verify warning message",
       "Stop non-essential operation",
       "Contact engineer"
     ]
   },
+
   "Network Error": {
     "risk": "Low",
+    "category": "Network",
+    "severity": 30,
+    "estimated_time": "15 mins",
     "steps": [
       "Check network cable",
       "Restart workstation",
       "Verify router status"
     ]
   },
+
   "Power Failure": {
     "risk": "High",
+    "category": "Power",
+    "severity": 100,
+    "estimated_time": "5 mins",
     "steps": [
       "Check power supply",
       "Verify UPS status",
       "Contact engineer"
     ]
   },
+
   "Scanner Communication Error": {
     "risk": "Medium",
+    "category": "Communication",
+    "severity": 65,
+    "estimated_time": "15 mins",
     "steps": [
       "Check communication cables",
       "Restart scanner console",
       "Verify network connection"
     ]
   },
+
   "Patient Table Error": {
     "risk": "Medium",
+    "category": "Mechanical",
+    "severity": 55,
+    "estimated_time": "20 mins",
     "steps": [
       "Inspect table movement",
       "Check safety lock",
       "Restart table controller"
     ]
   },
+
   "Image Reconstruction Error": {
     "risk": "Medium",
+    "category": "Software",
+    "severity": 50,
+    "estimated_time": "15 mins",
     "steps": [
       "Verify scan parameters",
       "Check storage availability",
       "Restart reconstruction service"
     ]
   },
+
   "Coil Connection Error": {
     "risk": "Low",
+    "category": "Hardware",
+    "severity": 35,
+    "estimated_time": "10 mins",
     "steps": [
       "Reconnect coil",
       "Check connector pins",
       "Run coil test"
     ]
   },
+
   "Gradient System Error": {
     "risk": "High",
+    "category": "Scanner Core",
+    "severity": 98,
+    "estimated_time": "5 mins",
     "steps": [
       "Stop scanning",
       "Record error code",
       "Contact engineer"
     ]
   },
+
   "Temperature Sensor Error": {
     "risk": "Medium",
+    "category": "Sensors",
+    "severity": 60,
+    "estimated_time": "15 mins",
     "steps": [
       "Verify sensor reading",
       "Inspect cooling system",

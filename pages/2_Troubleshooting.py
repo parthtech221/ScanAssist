@@ -3,19 +3,20 @@ import json
 import os
 from datetime import datetime
 from fpdf import FPDF
+from difflib import get_close_matches
 
 st.title("🔧 Troubleshooting")
 
-# =========================
+# =====================================
 # LOAD PROCEDURES
-# =========================
+# =====================================
 
 with open("procedures.json", "r", encoding="utf-8") as f:
     procedures = json.load(f)
 
-# =========================
+# =====================================
 # SESSION STATE
-# =========================
+# =====================================
 
 defaults = {
     "machine": "",
@@ -26,12 +27,49 @@ defaults = {
 }
 
 for key, value in defaults.items():
+
     if key not in st.session_state:
+
         st.session_state[key] = value
 
-# =========================
+# =====================================
+# SMART SEARCH
+# =====================================
+
+def find_procedure(user_input):
+
+    if user_input in procedures:
+        return user_input
+
+    user_lower = user_input.lower()
+
+    for procedure in procedures.keys():
+
+        proc_lower = procedure.lower()
+
+        if user_lower in proc_lower:
+            return procedure
+
+        words = user_lower.split()
+
+        if all(word in proc_lower for word in words):
+            return procedure
+
+    matches = get_close_matches(
+        user_input,
+        procedures.keys(),
+        n=1,
+        cutoff=0.4
+    )
+
+    if matches:
+        return matches[0]
+
+    return None
+
+# =====================================
 # INPUTS
-# =========================
+# =====================================
 
 machine = st.text_input(
     "Machine Type",
@@ -48,10 +86,6 @@ error = st.text_input(
     value=st.session_state.error
 )
 
-# =========================
-# SEARCH
-# =========================
-
 if st.button("🔍 Search Procedure"):
 
     st.session_state.machine = machine
@@ -59,88 +93,187 @@ if st.button("🔍 Search Procedure"):
     st.session_state.error = error
     st.session_state.searched = True
 
-# =========================
-# SHOW RESULT
-# =========================
+# =====================================
+# SEARCH RESULTS
+# =====================================
 
 if st.session_state.searched:
 
-    error = st.session_state.error
+    found_error = find_procedure(
+        st.session_state.error
+    )
 
-    if error in procedures:
+    if found_error:
 
-        data = procedures[error]
+        data = procedures[found_error]
 
         risk = data["risk"]
+        category = data["category"]
+        severity = data["severity"]
+        est_time = data["estimated_time"]
 
         st.success("Procedure Found")
 
-        col1, col2, col3 = st.columns(3)
+        if found_error != st.session_state.error:
 
-        with col1:
-            st.metric(
-                "Machine",
-                st.session_state.machine
+            st.info(
+                f"Closest Match: {found_error}"
             )
 
-        with col2:
-            st.metric(
-                "Model",
-                st.session_state.model
-            )
+        # ==============================
+        # METRICS
+        # ==============================
 
-        with col3:
+        c1, c2, c3, c4 = st.columns(4)
+
+        with c1:
             st.metric(
                 "Risk",
                 risk
             )
 
+        with c2:
+            st.metric(
+                "Category",
+                category
+            )
+
+        with c3:
+            st.metric(
+                "Severity",
+                f"{severity}/100"
+            )
+
+        with c4:
+            st.metric(
+                "Estimated Time",
+                est_time
+            )
+
         st.divider()
 
-        # =========================
-        # RISK ASSESSMENT
-        # =========================
+        # ==============================
+        # PRIORITY SCORE
+        # ==============================
 
-        st.subheader("Risk Assessment")
+        st.subheader("🚨 Engineer Priority Score")
 
-        if risk == "High":
+        st.progress(
+            severity / 100
+        )
+
+        st.write(
+            f"Priority Score: {severity}/100"
+        )
+
+        if severity >= 90:
 
             st.error(
-                "🔴 HIGH RISK"
+                "Critical Priority"
             )
 
-            st.info(
-                "Recommendation: Escalate to engineer immediately."
-            )
-
-        elif risk == "Medium":
+        elif severity >= 60:
 
             st.warning(
-                "🟡 MEDIUM RISK"
-            )
-
-            st.info(
-                "Recommendation: Complete troubleshooting before escalation."
+                "Medium Priority"
             )
 
         else:
 
             st.success(
-                "🟢 LOW RISK"
-            )
-
-            st.info(
-                "Recommendation: Continue normal troubleshooting."
+                "Low Priority"
             )
 
         st.divider()
 
-        # =========================
-        # CHECKLIST
-        # =========================
+        # ==============================
+        # AI RECOMMENDATION ENGINE
+        # ==============================
 
         st.subheader(
-            "Troubleshooting Checklist"
+            "🤖 AI Recommendation"
+        )
+
+        if risk == "High":
+
+            st.error(
+                "Immediate engineer inspection recommended."
+            )
+
+            st.write(
+                "- High severity issue detected"
+            )
+
+            st.write(
+                "- Stop non-essential operations"
+            )
+
+            st.write(
+                "- Escalate immediately"
+            )
+
+        elif risk == "Medium":
+
+            st.warning(
+                "Complete troubleshooting steps before escalation."
+            )
+
+            st.write(
+                "- Follow all procedures carefully"
+            )
+
+            st.write(
+                "- Monitor system behavior"
+            )
+
+            st.write(
+                "- Escalate if unresolved"
+            )
+
+        else:
+
+            st.success(
+                "Continue standard troubleshooting."
+            )
+
+            st.write(
+                "- Low operational risk"
+            )
+
+            st.write(
+                "- Engineer escalation not immediately required"
+            )
+
+        st.divider()
+
+        # ==============================
+        # SIMILAR ISSUES
+        # ==============================
+
+        st.subheader(
+            "🔎 Similar Issues"
+        )
+
+        for procedure_name, info in procedures.items():
+
+            if (
+                info["category"]
+                == category
+                and procedure_name != found_error
+            ):
+
+                st.write(
+                    f"• {procedure_name}"
+                )
+
+        st.divider()
+
+        # ==============================
+        # CHECKLIST
+        # ==============================
+
+        st.subheader(
+            "📋 Troubleshooting Checklist"
         )
 
         completed_steps = []
@@ -153,16 +286,13 @@ if st.session_state.searched:
             data["steps"]
         ):
 
-            checkbox_key = (
-                f"{error}_step_{index}"
-            )
-
             checked = st.checkbox(
                 step,
-                key=checkbox_key
+                key=f"{found_error}_{index}"
             )
 
             if checked:
+
                 completed_steps.append(
                     step
                 )
@@ -175,14 +305,33 @@ if st.session_state.searched:
         st.progress(progress)
 
         st.write(
-            f"Completed {len(completed_steps)} / {total_steps} steps"
+            f"Completed {len(completed_steps)} of {total_steps} steps"
         )
 
         st.divider()
 
-        # =========================
-        # RESOLUTION
-        # =========================
+        # ==============================
+        # RESOLUTION CHANCE
+        # ==============================
+
+        st.subheader(
+            "📈 Estimated Resolution Chance"
+        )
+
+        chance = int(
+            progress * 100
+        )
+
+        st.metric(
+            "Resolution Probability",
+            f"{chance}%"
+        )
+
+        st.divider()
+
+        # ==============================
+        # RESOLUTION STATUS
+        # ==============================
 
         resolved = st.radio(
             "Issue Resolved?",
@@ -210,7 +359,7 @@ if st.session_state.searched:
 SCANASSIST ENGINEER REPORT
 
 Generated:
-{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 Machine:
 {st.session_state.machine}
@@ -219,10 +368,19 @@ Model:
 {st.session_state.model}
 
 Error:
-{error}
+{found_error}
 
 Risk:
 {risk}
+
+Category:
+{category}
+
+Severity:
+{severity}/100
+
+Estimated Resolution Time:
+{est_time}
 
 Completed Steps:
 """
@@ -231,15 +389,11 @@ Completed Steps:
 
                     for step in completed_steps:
 
-                        report += (
-                            f"\n[DONE] {step}"
-                        )
+                        report += f"\n[DONE] {step}"
 
                 else:
 
-                    report += (
-                        "\nNo steps completed"
-                    )
+                    report += "\nNo steps completed"
 
                 report += """
 
@@ -255,11 +409,8 @@ Engineer Inspection Required
                     exist_ok=True
                 )
 
-                timestamp = (
-                    datetime.now()
-                    .strftime(
-                        "%Y%m%d_%H%M%S"
-                    )
+                timestamp = datetime.now().strftime(
+                    "%Y%m%d_%H%M%S"
                 )
 
                 txt_file = (
@@ -274,10 +425,6 @@ Engineer Inspection Required
 
                     file.write(report)
 
-                # =========================
-                # PDF
-                # =========================
-
                 pdf_file = (
                     f"reports/report_{timestamp}.pdf"
                 )
@@ -286,11 +433,6 @@ Engineer Inspection Required
 
                 pdf.add_page()
 
-                pdf.set_auto_page_break(
-                    auto=True,
-                    margin=15
-                )
-
                 pdf.set_font(
                     "Arial",
                     size=12
@@ -298,11 +440,7 @@ Engineer Inspection Required
 
                 for line in report.splitlines():
 
-                    if line.strip() == "":
-
-                        pdf.ln(5)
-
-                    else:
+                    if line.strip():
 
                         pdf.cell(
                             190,
@@ -310,6 +448,10 @@ Engineer Inspection Required
                             txt=line[:100],
                             ln=True
                         )
+
+                    else:
+
+                        pdf.ln(5)
 
                 pdf.output(
                     pdf_file
@@ -319,17 +461,10 @@ Engineer Inspection Required
                     "✅ Report Generated"
                 )
 
-                st.text_area(
-                    "Engineer Report",
-                    report,
-                    height=300
-                )
-
                 st.download_button(
-                    label="⬇ Download TXT",
-                    data=report,
-                    file_name="Engineer_Report.txt",
-                    mime="text/plain"
+                    "⬇ Download TXT",
+                    report,
+                    file_name="Engineer_Report.txt"
                 )
 
                 with open(
@@ -338,8 +473,8 @@ Engineer Inspection Required
                 ) as pdf_download:
 
                     st.download_button(
-                        label="⬇ Download PDF",
-                        data=pdf_download,
+                        "⬇ Download PDF",
+                        pdf_download,
                         file_name="Engineer_Report.pdf",
                         mime="application/pdf"
                     )
@@ -347,5 +482,9 @@ Engineer Inspection Required
     else:
 
         st.error(
-            "❌ Procedure Not Found"
+            "❌ No matching procedure found."
+        )
+
+        st.info(
+            "Try keywords such as cooling, helium, power, network, scanner."
         )
